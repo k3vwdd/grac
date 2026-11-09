@@ -1,7 +1,8 @@
 name: test workflow
 
 on:
-  push:
+  schedule:
+    - cron: "*/1 * * * *"
 
 jobs:
   docker:
@@ -11,7 +12,7 @@ jobs:
         run: echo docker build -t docker.io/${{vars.DOCKERUSERNAME}}/${{vars.IMAGE_NAME}}:latest
 
       - name: Docker Login
-        run: echo docker login --username=${{vars.DOCKERUSERNAME}}--password=${{secrets.DOCKERPASSWORD}}
+        run: echo docker login --username=${{vars.DOCKERUSERNAME}} --password=${{secrets.DOCKERPASSWORD}}
 
       - name: Docker Publish
         run: echo docker push docker.io/${{vars.DOCKERUSERNAME}}${{vars.IMAGE_NAME}}:latest
