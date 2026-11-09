@@ -18,5 +18,14 @@ jobs:
       - name: Docker Publish
         run: echo docker push docker.io/${{vars.DOCKERUSERNAME}}${{vars.IMAGE_NAME}}:latest
 
+  deploy:
+    concurrency:
+      group: production-deployment
+      cancel-in-progress: true
+    needs: docker
+    runs-on: ubuntu-latest
+    steps:
       - name: Docker run
-        run: echo docker run -d -p 8080:80 docker.io/${{vars.DOCKERUSERNAME}}${{vars.IMAGE_NAME}}:latest
+        run: |
+          echo docker run -d -p 8080:80 docker.io/${{vars.DOCKERUSERNAME}}${{vars.IMAGE_NAME}}:latest
+          sleep 600s
