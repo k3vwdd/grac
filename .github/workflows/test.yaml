@@ -4,12 +4,19 @@ on:
   push:
 
 jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out repo
+        uses: actions/checkout@v4
+
   docker:
+    needs: checkout
     runs-on: ubuntu-latest
 
     steps:
       - name: Docker build
-        run: docker build -t docker.io/${{vars.DOCKERUSERNAME}}/${{vars.IMAGE_NAME}}:latest .
+        run: docker build -t docker.io/${{vars.DOCKERUSERNAME}}/${{vars.IMAGE_NAME}}:latest
 
       - name: Docker Login
         run: docker login --username=${{vars.DOCKERUSERNAME}}--DOCKERPASSWORD=${{secrets.password}}
