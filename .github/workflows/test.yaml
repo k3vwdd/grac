@@ -1,0 +1,27 @@
+name: test workflow
+
+on:
+  push:
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Docker build
+        run: docker build -t docker.io/DOCKERUSERNAME/imageName:latest
+
+      - name: Docker Login
+        run: docker login --username=${{vars.DOCKERUSERNAME}}--DOCKERPASSWORD=${{secrets.password}}
+
+      - name: Docker Publish
+        run: docker push docker.io/${{vars.DOCKERUSERNAME}}imageName:latest
+
+  deploy:
+    # dependent on the job above, needs to finish and needs to be successful.
+    needs: docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Docker run
+        run: docker run -d -p 8080:80 docker.io/${{vars.DOCKERUSERNAME}}imageName:latest
