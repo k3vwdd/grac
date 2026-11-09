@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Docker build
-        run: docker build -t docker.io/${{vars.DOCKERUSERNAME}}/${{vars.IMAGE_NAME}}:latest
+        run: docker build -t docker.io/${{vars.DOCKERUSERNAME}}/${{vars.IMAGE_NAME}}:latest .
 
       - name: Docker Login
         run: docker login --username=${{vars.DOCKERUSERNAME}}--DOCKERPASSWORD=${{secrets.password}}
