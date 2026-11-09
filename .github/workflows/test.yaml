@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Docker build
-        run: docker build -t docker.io/DOCKERUSERNAME/imageName:latest
+        run: docker build -t docker.io/${{vars.DOCKERUSERNAME}}/imageName:latest
 
       - name: Docker Login
         run: docker login --username=${{vars.DOCKERUSERNAME}}--DOCKERPASSWORD=${{secrets.password}}
