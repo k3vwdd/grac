@@ -4,19 +4,14 @@ on:
   push:
 
 jobs:
-  checkout:
+  docker:
     runs-on: ubuntu-latest
     steps:
       - name: check out repo
         uses: actions/checkout@v4
 
-  docker:
-    needs: checkout
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Docker build
-        run: docker build -t docker.io/${{vars.DOCKERUSERNAME}}/${{vars.IMAGE_NAME}}:latest
+        run: docker build -t docker.io/${{vars.DOCKERUSERNAME}}/${{vars.IMAGE_NAME}}:latest .
 
       - name: Docker Login
         run: docker login --username=${{vars.DOCKERUSERNAME}}--DOCKERPASSWORD=${{secrets.password}}
@@ -24,11 +19,5 @@ jobs:
       - name: Docker Publish
         run: docker push docker.io/${{vars.DOCKERUSERNAME}}${{vars.IMAGE_NAME}}:latest
 
-  deploy:
-    # dependent on the job above, needs to finish and needs to be successful.
-    needs: docker
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Docker run
         run: docker run -d -p 8080:80 docker.io/${{vars.DOCKERUSERNAME}}${{vars.IMAGE_NAME}}:latest
