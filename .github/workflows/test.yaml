@@ -9,13 +9,13 @@ jobs:
 
     steps:
       - name: Docker build
-        run: docker build -t docker.io/${{vars.DOCKERUSERNAME}}/imageName:latest
+        run: docker build -t docker.io/${{vars.DOCKERUSERNAME}}/${{vars.IMAGE_NAME}}:latest
 
       - name: Docker Login
         run: docker login --username=${{vars.DOCKERUSERNAME}}--DOCKERPASSWORD=${{secrets.password}}
 
       - name: Docker Publish
-        run: docker push docker.io/${{vars.DOCKERUSERNAME}}imageName:latest
+        run: docker push docker.io/${{vars.DOCKERUSERNAME}}${{vars.IMAGE_NAME}}:latest
 
   deploy:
     # dependent on the job above, needs to finish and needs to be successful.
@@ -24,4 +24,4 @@ jobs:
 
     steps:
       - name: Docker run
-        run: docker run -d -p 8080:80 docker.io/${{vars.DOCKERUSERNAME}}imageName:latest
+        run: docker run -d -p 8080:80 docker.io/${{vars.DOCKERUSERNAME}}${{vars.IMAGE_NAME}}:latest
